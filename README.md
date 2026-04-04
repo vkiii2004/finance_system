@@ -43,3 +43,6 @@ Analyst/Admin can read records; only Admin can create/update/delete.
 ## Error Format
 Validation and API errors return a consistent JSON body:
 `{ timestamp, status, error, message, path, details }`
+## Database screen Shot is attached below
+<img width="1218" height="885" alt="Screenshot 2026-04-05 003425" src="https://github.com/user-attachments/assets/e2b64d6f-351b-4141-9152-785adc184f22" />
+
