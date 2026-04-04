@@ -5,7 +5,7 @@ import com.vishal.finance_backend.dto.responses.DashboardSummaryResponse;
 import com.vishal.finance_backend.dto.responses.RecentActivityResponse;
 import com.vishal.finance_backend.dto.responses.TrendsResponse;
 import com.vishal.finance_backend.enums.TrendGranularity;
-import com.vishal.finance_backend.exception.BadRequestException;
+import com.vishal.finance_backend.exception.ApiException;
 import com.vishal.finance_backend.service.DashboardService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -61,7 +61,7 @@ public class DashboardController {
         try {
             g = TrendGranularity.valueOf(granularity.trim().toUpperCase());
         } catch (Exception e) {
-            throw new BadRequestException("Invalid granularity. Use MONTHLY or WEEKLY.");
+            throw ApiException.badRequest("Invalid granularity. Use MONTHLY or WEEKLY.");
         }
         return dashboardService.getTrends(g, startDate, endDate);
     }

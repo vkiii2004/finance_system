@@ -15,15 +15,26 @@ import java.util.Optional;
 public interface FinancialRecordsRepository extends JpaRepository<FinancialRecords,Long> {
     List<FinancialRecords>findByUserId(Long userId);
 
-    @Query("""
-            SELECT fr
-            FROM FinancialRecords fr
-            WHERE fr.user.id = :userId
-              AND (:type IS NULL OR fr.type = :type)
-              AND (:category IS NULL OR fr.category = :category)
-              AND (:startDate IS NULL OR fr.date >= :startDate)
-              AND (:endDate IS NULL OR fr.date <= :endDate)
-            """)
+    @Query(
+            value = """
+                    SELECT *
+                    FROM financial_records fr
+                    WHERE fr.user_id = :userId
+                      AND (:type IS NULL OR fr.type = :type)
+                      AND (:category IS NULL OR fr.category = :category)
+                      AND (:startDate IS NULL OR fr.`date` >= :startDate)
+                      AND (:endDate IS NULL OR fr.`date` <= :endDate)
+                    """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM financial_records fr
+                    WHERE fr.user_id = :userId
+                      AND (:type IS NULL OR fr.type = :type)
+                      AND (:category IS NULL OR fr.category = :category)
+                      AND (:startDate IS NULL OR fr.`date` >= :startDate)
+                      AND (:endDate IS NULL OR fr.`date` <= :endDate)
+                    """,
+            nativeQuery = true)
     Page<FinancialRecords> search(
             @Param("userId") Long userId,
             @Param("type") RecordType type,

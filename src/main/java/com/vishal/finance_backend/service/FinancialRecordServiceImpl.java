@@ -6,7 +6,7 @@ import com.vishal.finance_backend.dto.requests.CreateRecordRequest;
 import com.vishal.finance_backend.dto.requests.UpdateRecordRequest;
 import com.vishal.finance_backend.dto.responses.FinancialRecordResponse;
 import com.vishal.finance_backend.enums.RecordType;
-import com.vishal.finance_backend.exception.ResourceNotFoundException;
+import com.vishal.finance_backend.exception.ApiException;
 import com.vishal.finance_backend.repository.FinancialRecordsRepository;
 import com.vishal.finance_backend.repository.UserRepository;
 import com.vishal.finance_backend.util.SecurityUtils;
@@ -51,7 +51,7 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
 
         FinancialRecords record = financialRecordsRepository
                 .findByIdAndUser_Id(id, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Financial record not found"));
+                .orElseThrow(() -> ApiException.notFound("Financial record not found"));
 
         return toResponse(record);
     }
@@ -74,7 +74,7 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
 
         FinancialRecords record = financialRecordsRepository
                 .findByIdAndUser_Id(id, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Financial record not found"));
+                .orElseThrow(() -> ApiException.notFound("Financial record not found"));
 
         record.setAmount(request.getAmount());
         record.setType(request.getType());
@@ -91,7 +91,7 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
 
         FinancialRecords record = financialRecordsRepository
                 .findByIdAndUser_Id(id, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Financial record not found"));
+                .orElseThrow(() -> ApiException.notFound("Financial record not found"));
 
         financialRecordsRepository.delete(Objects.requireNonNull(record, "record"));
     }
@@ -99,7 +99,7 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
     private User currentUser() {
         String username = SecurityUtils.getCurrentUsername();
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
+                .orElseThrow(() -> ApiException.notFound("Authenticated user not found"));
     }
 
     private FinancialRecordResponse toResponse(FinancialRecords record) {

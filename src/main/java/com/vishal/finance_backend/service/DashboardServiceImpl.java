@@ -11,6 +11,7 @@ import com.vishal.finance_backend.dto.responses.TrendPoint;
 import com.vishal.finance_backend.dto.responses.TrendsResponse;
 import com.vishal.finance_backend.enums.RecordType;
 import com.vishal.finance_backend.enums.TrendGranularity;
+import com.vishal.finance_backend.exception.ApiException;
 import com.vishal.finance_backend.repository.FinancialRecordsRepository;
 import com.vishal.finance_backend.repository.UserRepository;
 import com.vishal.finance_backend.util.SecurityUtils;
@@ -243,7 +244,7 @@ public class DashboardServiceImpl implements DashboardService {
     private User currentUser() {
         String username = SecurityUtils.getCurrentUsername();
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new com.vishal.finance_backend.exception.ResourceNotFoundException("Authenticated user not found"));
+                .orElseThrow(() -> ApiException.notFound("Authenticated user not found"));
     }
 }
 

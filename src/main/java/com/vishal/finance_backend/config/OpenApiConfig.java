@@ -8,10 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Registers HTTP Basic Auth in the OpenAPI document so Swagger UI can send
- * {@code Authorization: Basic ...} on Try it out requests (same as Postman).
- */
+
 @Configuration
 public class OpenApiConfig {
 

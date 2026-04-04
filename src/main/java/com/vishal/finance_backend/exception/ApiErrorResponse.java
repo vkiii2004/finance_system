@@ -1,11 +1,11 @@
 package com.vishal.finance_backend.exception;
 
+import lombok.Getter;
+
 import java.time.Instant;
 import java.util.List;
 
-/**
- * Standard error format for the whole API.
- */
+@Getter
 public class ApiErrorResponse {
     private final Instant timestamp = Instant.now();
     private final int status;
@@ -21,29 +21,4 @@ public class ApiErrorResponse {
         this.path = path;
         this.details = details;
     }
-
-    public Instant getTimestamp() {
-        return timestamp;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public List<String> getDetails() {
-        return details;
-    }
 }
-

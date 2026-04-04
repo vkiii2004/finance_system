@@ -5,8 +5,7 @@ import com.vishal.finance_backend.Entity.User;
 import com.vishal.finance_backend.dto.requests.CreateUserRequest;
 import com.vishal.finance_backend.dto.requests.UpdateUserRequest;
 import com.vishal.finance_backend.dto.responses.UserResponse;
-import com.vishal.finance_backend.exception.ConflictException;
-import com.vishal.finance_backend.exception.ResourceNotFoundException;
+import com.vishal.finance_backend.exception.ApiException;
 import com.vishal.finance_backend.repository.RoleRepository;
 import com.vishal.finance_backend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService{
     public UserResponse createUser(CreateUserRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new ConflictException("Username already exists");
+            throw ApiException.conflict("Username already exists");
         }
 
         User user = new User();
@@ -43,7 +42,7 @@ public class UserServiceImpl implements UserService{
 
         Role role = roleRepository
                 .findByName(request.getRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() -> ApiException.notFound("Role not found"));
 
         user.setRole(role);
 
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService{
     public UserResponse getUserById(Long id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> ApiException.notFound("User not found"));
         return toResponse(user);
     }
 
@@ -71,12 +70,12 @@ public class UserServiceImpl implements UserService{
 
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> ApiException.notFound("User not found"));
 
         // If username changes, ensure uniqueness.
         String targetUsername = request.getUsername();
         if (!user.getUsername().equals(targetUsername) && userRepository.existsByUsername(targetUsername)) {
-            throw new ConflictException("Username already exists");
+            throw ApiException.conflict("Username already exists");
         }
 
         user.setName(request.getName());
@@ -89,7 +88,7 @@ public class UserServiceImpl implements UserService{
 
         Role role = roleRepository
                 .findByName(request.getRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() -> ApiException.notFound("Role not found"));
         user.setRole(role);
 
         User saved = userRepository.save(user);
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService{
 
         User user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> ApiException.notFound("User not found"));
 
         userRepository.delete(user);
     }
